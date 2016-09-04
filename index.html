@@ -1,0 +1,150 @@
+<!doctype html>
+<html ng-app="toDoApp">
+   
+   <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  <style>
+   
+
+
+ 
+
+  </style>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.0/bootstrap.min.js"></script>
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script >
+         angular.module('toDoApp',['ngMaterial'])
+            .controller('toDoController',function($scope){
+              
+             
+
+               $scope.tasks = [];
+   
+
+  
+              //console.log($scope.tasks[0].taskname);
+
+
+               $scope.addToDo=function(){
+                         console.log($scope.formTodoText);
+                         if($scope.priority=="high"){
+                          $scope.rating="Urgent!";
+                         }
+                         else if($scope.priority=="medium"){
+                          $scope.rating="Important";
+                         }
+                         else{
+                          $scope.rating="Not so important";
+                         }
+
+                         console.log($scope.rating);
+                  $scope.tasks.push({taskname:$scope.formTodoText,done:false,priority:$scope.priority,rating:$scope.rating});
+                  console.log($scope.tasks[0]);
+                  $scope.counter=$scope.tasks.length;
+                  $scope.formTodoText = '';   
+             };
+               
+               $scope.delete=function(){
+                  $scope.tasks.splice(this.$index, 1);
+                  $scope.counter=$scope.tasks.length;
+                   };
+               $scope.checkUpdate=function(){
+                    $scope.tasks[this.$index].done=!($scope.tasks[this.$index].done);
+                    console.log( $scope.tasks[this.$index].done);
+              };    
+               $scope.remove=function(){
+                  var oldList = $scope.tasks;
+                  $scope.tasks = [];
+                  angular.forEach(oldList, function(x) {
+                        if (!x.done) $scope.tasks.push(x);
+                        $scope.counter=$scope.tasks.length;
+                       });
+                };
+
+                
+                
+   
+});
+
+
+      </script>
+  </head>
+   
+   <body layout-align="center center" >
+    
+      <div ng-controller="toDoController" ng-cloak class="container-fluid">
+      <md-content class="md-padding" layout-lg="column" layout="row" layout-align="center center">
+        <md-card class="card-100-center">
+          <md-card-content layout-align="center center" class="card-100-center">
+          <md-card-title>
+                <md-card-title-text>
+                    <center><span class="md-headline">My Bucket List!</span></center>
+                </md-card-title-text>
+            </md-card-title> 
+            <form ng-submit="addToDo()">
+              
+                <md-input-container class="md-block">
+                    <div class="row">
+                        <div class="input-group">
+                          <div class="col-md-6"><input type = "text" ng-model="formTodoText" ng-model-instant placeholder = "Enter your task"></div>
+                          <div class="col-md-3">
+                          <md-input-container>
+                                      <label>Priority</label>
+                                            <md-select ng-model="priority">
+                                                      <md-option value="high">High</md-option>
+                                                      <md-option value="medium">Medium</md-option>
+                                                      <md-option value="low">Low</md-option>
+                                            </md-select>
+                          </md-input-container>
+                          </div>
+                          <div class="col-md-3"><md-button  class="md-raised md-primary" ng-click="addToDo()"> Add Tasks</md-button></div>
+                          
+                        </div>
+                     </div>
+                </md-input-container>       
+            </form>  
+          
+             
+          
+             <md-list flex>
+                  <div class="row" layout-align="center cneter">
+                    <md-list-item class="md-2-line" ng-repeat="task in tasks">
+                            <div class="input-group" flex >
+                                <div class="col-lg-2"><md-checkbox  ng-model="task.done" ></md-checkbox></div>
+                                <div class="col-lg-5"><label for="{{$index}}" >{{task.taskname}}</label></div>
+                                <div class="col-lg-3">{{task.rating}}</div>
+                                <div class="col-lg-2"><span flex></span><md-button class="md-icon-button" ng-click="delete()" layout-align="start end"><md-icon md-svg-icon="delete_icon.svg"></md-icon></md-button></div>
+                            </div>    
+                    </md-list-item>
+                  </div>
+                  <md-divider ></md-divider>
+            <md-list>
+                
+          <p ng-init="counter=0">You have {{counter}} items in your bucket </p>
+            
+          <p><center><md-button class="md-raised md-primary" ng-click="remove()">Remove marked tasks</md-button></center></p>
+         
+              </md-card-content>
+          </md-card>  
+       </md-content> 
+      </div>
+     
+   </body>
+   
+</html>
